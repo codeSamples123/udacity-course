@@ -11,12 +11,16 @@ import 'package:flutter/material.dart';
 /// The widget is composed on an [Icon] and [Text]. Tapping on the widget shows
 /// a colored [InkWell] animation.
 class Category extends StatelessWidget {
+  final String name;
+  final MaterialColor color;
+  final IconData icon;
+
   /// Creates a [Category].
   ///
   /// A [Category] saves the name of the Category (e.g. 'Length'), its color for
   /// the UI, and the icon that represents it (e.g. a ruler).
-  // TODO: You'll need the name, color, and iconLocation from main.dart
-  const Category();
+  // DONE: You'll need the name, color, and iconLocation from main.dart
+  const Category({this.name, this.color, this.icon});
 
   /// Builds a custom widget that shows [Category] information.
   ///
@@ -27,7 +31,42 @@ class Category extends StatelessWidget {
   // Theme ancestor in the tree. Below, we obtain the display1 text theme.
   // See https://docs.flutter.io/flutter/material/Theme-class.html
   Widget build(BuildContext context) {
-    // TODO: Build the custom widget here, referring to the Specs.
-    return Container();
+    // Done: Build the custom widget here, referring to the Specs.
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        highlightColor: color,
+        borderRadius: BorderRadius.all(Radius.circular(50.0)),
+        splashColor: color,
+        onTap: () {
+          print('I was tapped!');
+        },
+        child: Container(
+          height: 100.0,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Icon(
+                    icon,
+                    size: 60.0,
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 24.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
