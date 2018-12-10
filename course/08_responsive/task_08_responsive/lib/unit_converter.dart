@@ -32,7 +32,7 @@ class _UnitConverterState extends State<UnitConverter> {
   String _convertedValue = '';
   List<DropdownMenuItem> _unitMenuItems;
   bool _showValidationError = false;
-  // TODO: Pass this into the TextField so that the input value persists
+  // Done: Pass this into the TextField so that the input value persists
   final _inputKey = GlobalKey(debugLabel: 'inputText');
 
   @override
@@ -168,8 +168,8 @@ class _UnitConverterState extends State<UnitConverter> {
       child: Theme(
         // This sets the color of the [DropdownMenuItem]
         data: Theme.of(context).copyWith(
-              canvasColor: Colors.grey[50],
-            ),
+          canvasColor: Colors.grey[50],
+        ),
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
@@ -196,6 +196,7 @@ class _UnitConverterState extends State<UnitConverter> {
           // accepts numbers and calls the onChanged property on update.
           // You can read more about it here: https://flutter.io/text-input
           TextField(
+            key: _inputKey,
             style: Theme.of(context).textTheme.display1,
             decoration: InputDecoration(
               labelStyle: Theme.of(context).textTheme.display1,
@@ -246,9 +247,8 @@ class _UnitConverterState extends State<UnitConverter> {
       ),
     );
 
-    // TODO: Use a ListView instead of a Column
-    final converter = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    // Done: Use a ListView instead of a Column
+    final converter = ListView(
       children: [
         input,
         arrows,
@@ -256,11 +256,21 @@ class _UnitConverterState extends State<UnitConverter> {
       ],
     );
 
-    // TODO: Use an OrientationBuilder to add a width to the unit converter
+    // Done: Use an OrientationBuilder to add a width to the unit converter
     // in landscape mode
-    return Padding(
-      padding: _padding,
-      child: converter,
+    return OrientationBuilder(
+      builder: (builder, orientation) {
+        if (orientation == Orientation.portrait) {
+          return Padding(
+            padding: _padding,
+            child: converter,
+          );
+        } else {
+          return Center(
+            child: Container(width: 500, child: converter),
+          );
+        }
+      },
     );
   }
 }
