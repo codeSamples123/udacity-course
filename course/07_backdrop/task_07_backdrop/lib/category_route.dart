@@ -4,11 +4,13 @@
 
 import 'package:flutter/material.dart';
 
+import 'backdrop.dart';
 import 'category.dart';
 import 'category_tile.dart';
 import 'unit.dart';
+import 'unit_converter.dart';
 
-final _backgroundColor = Colors.green[100];
+var _backgroundColor = Colors.green[100];
 
 /// Category Route (screen).
 ///
@@ -25,8 +27,11 @@ class CategoryRoute extends StatefulWidget {
 }
 
 class _CategoryRouteState extends State<CategoryRoute> {
-  // TODO: Keep track of a default [Category], and the currently-selected
+  // Done: Keep track of a default [Category], and the currently-selected
   // [Category]
+  Category _defaultCategory;
+  Category _currentSelectedCategory;
+
   final _categories = <Category>[];
   static const _categoryNames = <String>[
     'Length',
@@ -77,7 +82,7 @@ class _CategoryRouteState extends State<CategoryRoute> {
   @override
   void initState() {
     super.initState();
-    // TODO: Set the default [Category] for the unit converter that opens
+    // Done: Set the default [Category] for the unit converter that opens
     for (var i = 0; i < _categoryNames.length; i++) {
       _categories.add(Category(
         name: _categoryNames[i],
@@ -86,11 +91,18 @@ class _CategoryRouteState extends State<CategoryRoute> {
         units: _retrieveUnitList(_categoryNames[i]),
       ));
     }
+    _defaultCategory = _categories[0];
+    _backgroundColor = _defaultCategory.color['highlight'];
   }
 
-  // TODO: Fill out this function
+  // Done: Fill out this function
   /// Function to call when a [Category] is tapped.
-  void _onCategoryTap(Category category) {}
+  void _onCategoryTap(Category category) {
+    setState(() {
+      _currentSelectedCategory = category;
+      _backgroundColor = category.color['highlight'];
+    });
+  }
 
   /// Makes the correct number of rows for the list view.
   ///
@@ -120,14 +132,19 @@ class _CategoryRouteState extends State<CategoryRoute> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Import and use the Backdrop widget
+    // Done: Import and use the Backdrop widget
+
     final listView = Container(
       color: _backgroundColor,
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.only(
+        left: 8.0,
+        right: 8.0,
+        bottom: 48.0,
+      ),
       child: _buildCategoryWidgets(),
     );
 
-    final appBar = AppBar(
+    /*final appBar = AppBar(
       elevation: 0.0,
       title: Text(
         'Unit Converter',
@@ -138,11 +155,17 @@ class _CategoryRouteState extends State<CategoryRoute> {
       ),
       centerTitle: true,
       backgroundColor: _backgroundColor,
-    );
+    );*/
 
-    return Scaffold(
-      appBar: appBar,
-      body: listView,
-    );
+    return Backdrop(
+        backTitle: Text('Select a Category'),
+        frontTitle: Text('Unit Converter'),
+        frontPanel: _currentSelectedCategory == null
+            ? UnitConverter(category: _defaultCategory)
+            : UnitConverter(category: _currentSelectedCategory),
+        backPanel: listView,
+        currentCategory: _currentSelectedCategory == null
+            ? _defaultCategory
+            : _currentSelectedCategory);
   }
 }

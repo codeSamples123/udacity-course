@@ -40,8 +40,17 @@ class _UnitConverterState extends State<UnitConverter> {
     _setDefaults();
   }
 
-  // TODO: _createDropdownMenuItems() and _setDefaults() should also be called
+  // Done: _createDropdownMenuItems() and _setDefaults() should also be called
   // each time the user switches [Categories].
+  @override
+  void didUpdateWidget(UnitConverter oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // We update our [DropdownMenuItem] units when we switch [Categories].
+    if (oldWidget.category != widget.category) {
+      _createDropdownMenuItems();
+      _setDefaults();
+    }
+  }
 
   /// Creates fresh list of [DropdownMenuItem] widgets, given a list of [Unit]s.
   void _createDropdownMenuItems() {
@@ -156,8 +165,8 @@ class _UnitConverterState extends State<UnitConverter> {
       child: Theme(
         // This sets the color of the [DropdownMenuItem]
         data: Theme.of(context).copyWith(
-              canvasColor: Colors.grey[50],
-            ),
+          canvasColor: Colors.grey[50],
+        ),
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
